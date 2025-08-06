@@ -16,16 +16,17 @@ class Button:
         self.text_rect = self.text_surf.get_rect(center=self.top_rect.center)
     
     def draw(self):
-        pg.draw.rect(self.top_color, self.top_rect)
+        pg.draw.rect(self.screen, self.top_color, self.top_rect)
         self.screen.blit(self.text_surf, self.text_rect)
-        self.check_click()
+        self.clicked()
     
-    def check_click(self):
+    def clicked(self):
         mouse_pos = pg.mouse.get_pos()
         if self.top_rect.collidepoint(mouse_pos):
             if pg.mouse.get_pressed()[0]:
                 self.pressed = True
+                return self.pressed
             else:
                 if self.pressed:
-                    print('Clicked')
                     self.pressed = False
+                    return self.pressed

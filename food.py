@@ -18,7 +18,7 @@ class Food:
     
     def get_random_pos(self):
         if len(self.game.snake.body) == settings.ROWS * settings.COLUMNS:
-            self.game.running = False
+            self.game.game_running = False
             return vector(-1, -1)
         
         while True:

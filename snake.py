@@ -40,8 +40,8 @@ class Snake:
 
     def check_death(self):
         body_collision = self.head in self.body[1:]
-        border_x_collision = (self.head.x < 0 or self.head.x * settings.CELL_SIZE >= settings.SCREEM_DIM[0])
-        border_y_collision = (self.head.y < 0 or self.head.y * settings.CELL_SIZE >= settings.SCREEM_DIM[1])
+        border_x_collision = (self.head.x < 0 or self.head.x * settings.CELL_SIZE >= settings.SCREEN_DIM[0])
+        border_y_collision = (self.head.y < 0 or self.head.y * settings.CELL_SIZE >= settings.SCREEN_DIM[1])
         
         if body_collision or border_x_collision or border_y_collision:
             return True
