@@ -17,13 +17,9 @@ class Food:
         pg.draw.rect(screen, self.color, rect, width=2)
     
     def get_random_pos(self):
-        if len(self.game.snake.body) == settings.ROWS * settings.COLUMNS:
-            self.game.game_running = False
-            return vector(-1, -1)
-        
         while True:
-            x = random.randint(0, settings.ROWS - 1)
-            y = random.randint(0, settings.COLUMNS - 1)
+            x = random.randint(0, settings.COLUMNS - 1)
+            y = random.randint(0, settings.ROWS - 1)
             pos_ok = True
             for body_part in self.game.snake.body:
                 if body_part.x == x and body_part.y == y:

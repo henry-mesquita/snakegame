@@ -1,12 +1,12 @@
 import pygame as pg
 
 class Button:
-    def __init__(self, text, width, height, pos, screen):
+    def __init__(self, text, width, height, fontsize, pos, screen):
         self.screen = screen
         
         # Main Attributes
         self.pressed = False
-        self.font = pg.font.Font(None, 30)
+        self.font = pg.font.Font(None, fontsize)
         # Top rectangle
         self.top_rect = pg.Rect((0, 0), (width, height))
         self.top_rect.center = pos
