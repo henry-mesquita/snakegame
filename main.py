@@ -57,6 +57,9 @@ class Game:
 
             for event in pg.event.get(): # EVENT LOOP
                 if event.type == pg.QUIT or self.quit_btn.clicked():
+                    self.game_running = False
+                    self.win_running = False
+                    self.settings_running = False
                     self.menu_running = False
 
             self.screen.fill(settings.WHITE)

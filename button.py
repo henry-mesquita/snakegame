@@ -22,11 +22,13 @@ class Button:
     
     def clicked(self):
         mouse_pos = pg.mouse.get_pos()
+        mouse_pressed = pg.mouse.get_pressed()[0]
         if self.top_rect.collidepoint(mouse_pos):
-            if pg.mouse.get_pressed()[0]:
+            if mouse_pressed:
                 self.pressed = True
-                return self.pressed
-            else:
-                if self.pressed:
-                    self.pressed = False
-                    return self.pressed
+            elif self.pressed:
+                self.pressed = False
+                return True
+        else:
+            self.pressed = False
+        return False
