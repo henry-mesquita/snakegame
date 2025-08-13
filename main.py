@@ -47,6 +47,11 @@ class Game:
         self.menu_running = True
 
         while self.menu_running:
+            self.screen.fill(settings.WHITE)
+            self.start_btn.draw()
+            self.settings_btn.draw()
+            self.quit_btn.draw()
+
             if self.start_btn.clicked():
                 self.run()
                 self.menu_running = False
@@ -61,11 +66,6 @@ class Game:
                     self.win_running = False
                     self.settings_running = False
                     self.menu_running = False
-
-            self.screen.fill(settings.WHITE)
-            self.start_btn.draw()
-            self.settings_btn.draw()
-            self.quit_btn.draw()
 
             pg.display.update()
             self.clock.tick(settings.FRAMERATE)

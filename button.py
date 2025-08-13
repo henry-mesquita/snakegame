@@ -18,7 +18,6 @@ class Button:
     def draw(self):
         pg.draw.rect(self.screen, self.top_color, self.top_rect)
         self.screen.blit(self.text_surf, self.text_rect)
-        self.clicked()
     
     def clicked(self):
         mouse_pos = pg.mouse.get_pos()
