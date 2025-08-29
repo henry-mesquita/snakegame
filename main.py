@@ -2,7 +2,6 @@ import pygame as pg
 from pygame import Vector2 as vector
 from snake import Snake
 from food import Food
-from button import Button
 from menu import show_config_menu
 
 class Game:
@@ -29,36 +28,6 @@ class Game:
         self.clock = pg.time.Clock()
         self.key_pressed = False
         self.score = 0
-
-        self.buttons_width = self.screen_dim[0] // 3
-        self.buttons_height = self.screen_dim[1] // 6
-        self.buttons_fontsize = self.screen_dim[0] // 12
-        self.font = pg.font.Font(None, self.buttons_fontsize)
-
-        self.start_btn = Button(text='Start Game', width=self.buttons_width,
-                                height=self.buttons_height, fontsize=self.buttons_fontsize,
-                                pos=(self.screen_dim[0] // 2,
-                                     self.screen_dim[1] // 2 - self.screen_dim[1] // 5),
-                                     screen=self.screen)
-
-        self.settings_btn = Button(text='Settings', width=self.buttons_width,
-                                   height=self.buttons_height, fontsize=self.buttons_fontsize,
-                                   pos=(self.screen_dim[0] // 2,
-                                       self.screen_dim[1] // 2),
-                                       screen=self.screen)
-
-        self.quit_btn = Button(text='Quit', width=self.buttons_width,
-                               height=self.buttons_height, fontsize=self.buttons_fontsize,
-                               pos=(self.screen_dim[0] // 2, 
-                                    self.screen_dim[1] // 2 + self.screen_dim[1] // 5),
-                                    screen=self.screen)
-
-        self.return_btn = Button(text='Return', width=self.buttons_width,
-                            height=self.buttons_height,
-                            fontsize=self.buttons_fontsize,
-                            pos=(self.screen_dim[0] // 2,
-                                self.screen_dim[1] // 2  + self.screen_dim[1] // 6),
-                                screen=self.screen)
 
     def draw_grid(self):
         for x in range(0, self.screen_dim[0], self.cell_size):
