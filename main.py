@@ -1,121 +1,73 @@
-import pygame as pg, settings
+import pygame as pg
 from pygame import Vector2 as vector
 from snake import Snake
 from food import Food
 from button import Button
+from menu import show_config_menu
 
 class Game:
-    def __init__(self):
+    def __init__(self, board_size=15, cell_size=30, snake_speed=150):
         pg.init()
         pg.display.set_caption('Snake Game')
 
-        self.screen = pg.display.set_mode(settings.SCREEN_DIM)
+        self.FRAMERATE = 60
+        self.GREEN = (0, 255, 0)
+        self.WHITE = (255, 255, 255)
+        self.BLACK = (0, 0, 0)
+        self.RED = (255, 0, 0)
+        self.DARK_PURPLE = (75, 0, 130)
+        self.GREY = (240, 240, 240)
+        self.DARK_GREY = (170, 170, 170)
+
+        self.snake_speed = snake_speed
+        self.board_size = board_size
+        self.cell_size = cell_size
+        self.rows, self.columns = board_size, board_size
+        self.screen_dim = (self.columns * self.cell_size, self.columns * self.cell_size)
+
+        self.screen = pg.display.set_mode(self.screen_dim)
         self.clock = pg.time.Clock()
         self.key_pressed = False
         self.score = 0
 
-        self.buttons_width = settings.SCREEN_DIM[0] // 3
-        self.buttons_height = settings.SCREEN_DIM[1] // 6
-        self.buttons_fontsize = settings.SCREEN_DIM[0] // 12
+        self.buttons_width = self.screen_dim[0] // 3
+        self.buttons_height = self.screen_dim[1] // 6
+        self.buttons_fontsize = self.screen_dim[0] // 12
         self.font = pg.font.Font(None, self.buttons_fontsize)
 
         self.start_btn = Button(text='Start Game', width=self.buttons_width,
                                 height=self.buttons_height, fontsize=self.buttons_fontsize,
-                                pos=(settings.SCREEN_DIM[0] // 2,
-                                     settings.SCREEN_DIM[1] // 2 - settings.SCREEN_DIM[1] // 5),
+                                pos=(self.screen_dim[0] // 2,
+                                     self.screen_dim[1] // 2 - self.screen_dim[1] // 5),
                                      screen=self.screen)
 
         self.settings_btn = Button(text='Settings', width=self.buttons_width,
                                    height=self.buttons_height, fontsize=self.buttons_fontsize,
-                                   pos=(settings.SCREEN_DIM[0] // 2,
-                                       settings.SCREEN_DIM[1] // 2),
+                                   pos=(self.screen_dim[0] // 2,
+                                       self.screen_dim[1] // 2),
                                        screen=self.screen)
 
         self.quit_btn = Button(text='Quit', width=self.buttons_width,
                                height=self.buttons_height, fontsize=self.buttons_fontsize,
-                               pos=(settings.SCREEN_DIM[0] // 2, 
-                                    settings.SCREEN_DIM[1] // 2 + settings.SCREEN_DIM[1] // 5),
+                               pos=(self.screen_dim[0] // 2, 
+                                    self.screen_dim[1] // 2 + self.screen_dim[1] // 5),
                                     screen=self.screen)
 
         self.return_btn = Button(text='Return', width=self.buttons_width,
                             height=self.buttons_height,
                             fontsize=self.buttons_fontsize,
-                            pos=(settings.SCREEN_DIM[0] // 2,
-                                settings.SCREEN_DIM[1] // 2  + settings.SCREEN_DIM[1] // 6),
+                            pos=(self.screen_dim[0] // 2,
+                                self.screen_dim[1] // 2  + self.screen_dim[1] // 6),
                                 screen=self.screen)
-    def main_menu(self):
-        self.menu_running = True
-
-        while self.menu_running:
-            self.screen.fill(settings.WHITE)
-            self.start_btn.draw()
-            self.settings_btn.draw()
-            self.quit_btn.draw()
-
-            if self.start_btn.clicked():
-                self.run()
-                self.menu_running = False
-
-            if self.settings_btn.clicked():
-                self.settings_menu()
-                self.menu_running = False
-
-            for event in pg.event.get(): # EVENT LOOP
-                if event.type == pg.QUIT or self.quit_btn.clicked():
-                    self.game_running = False
-                    self.win_running = False
-                    self.settings_running = False
-                    self.menu_running = False
-
-            pg.display.update()
-            self.clock.tick(settings.FRAMERATE)
-    
-    def settings_menu(self):
-        self.settings_running = True
-        while self.settings_running:
-            if self.return_btn.clicked():
-                self.main_menu()
-                self.settings_running = False
-
-            for event in pg.event.get(): # EVENT LOOP
-                if event.type == pg.QUIT:
-                    self.settings_running = False
-
-            self.screen.fill(settings.WHITE)
-            self.return_btn.draw()
-
-            pg.display.update()
-            self.clock.tick(settings.FRAMERATE)
-    
-    def end_menu(self):
-        self.win_running = True
-        text = str(self.score)
-        self.text_surf = self.font.render(text, True, "#BA1AC0")
-        while self.win_running:
-            if self.return_btn.clicked():
-                self.main_menu()
-                self.win_running = False
-
-            for event in pg.event.get(): # EVENT LOOP
-                if event.type == pg.QUIT:
-                    self.win_running = False
-
-            self.screen.fill(settings.WHITE)
-            self.return_btn.draw()
-            self.screen.blit(self.text_surf, (settings.SCREEN_DIM[0] // 2,
-                                              settings.SCREEN_DIM[1] // 2 - settings.SCREEN_DIM[1] // 4))
-
-            pg.display.update()
-            self.clock.tick(settings.FRAMERATE)
 
     def draw_grid(self):
-        for x in range(0, settings.SCREEN_DIM[0], settings.CELL_SIZE):
-            pg.draw.line(self.screen, settings.GREY, (x, 0), (x, settings.SCREEN_DIM[1]), width=3)
-        for y in range(0, settings.SCREEN_DIM[1], settings.CELL_SIZE):
-            pg.draw.line(self.screen, settings.GREY, (0, y), (settings.SCREEN_DIM[0], y), width=3)
+        for x in range(0, self.screen_dim[0], self.cell_size):
+            pg.draw.line(self.screen, self.GREY, (x, 0), (x, self.screen_dim[1]), width=3)
+        for y in range(0, self.screen_dim[1], self.cell_size):
+            pg.draw.line(self.screen, self.GREY, (0, y), (self.screen_dim[0], y), width=3)
     
     def process_movement(self):
-            if self.current_time - self.last_move_time > settings.SNAKE_SPEED:
+            if self.current_time - self.last_move_time > self.snake_speed:
                 self.last_move_time = self.current_time
                 self.snake.move()
                 self.snake.head = self.snake.body[0]
@@ -127,11 +79,10 @@ class Game:
 
             if self.snake.check_death():
                 self.game_running = False
-                return self.end_menu() 
 
     def run(self):
-        self.snake = Snake(settings.DARK_PURPLE, self)
-        self.food = Food(settings.RED, self)
+        self.snake = Snake(self.DARK_PURPLE, self)
+        self.food = Food(self.RED, self)
         self.game_running = True
         self.last_move_time = 0
         self.score = 0
@@ -162,21 +113,30 @@ class Game:
             
             self.process_movement()
 
-            self.screen.fill(settings.WHITE)
+            self.screen.fill(self.WHITE)
             self.draw_grid()
             self.snake.draw(self.screen)
             self.food.draw(self.screen)
 
             pg.display.update()
-            self.clock.tick(settings.FRAMERATE)
+            self.clock.tick(self.FRAMERATE)
     
     def check_win(self):
-        if self.score == settings.ROWS * settings.COLUMNS - 3:
+        if self.score == self.rows * self.rows - 3:
             return True
 
 def main():
-    game = Game()
-    game.main_menu()
+    pg.init()
+    while True:
+        try:
+            board_size, cell_size, snake_speed, game_running = show_config_menu()
+            if game_running == True:
+                game = Game(board_size, cell_size, snake_speed)
+                game.run()
+            else:
+                break
+        except Exception as e:
+            print(f'Exception: {e}')
     pg.quit()
 
 if __name__ == '__main__':
