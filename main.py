@@ -49,37 +49,43 @@ class Game:
             if self.snake.check_death():
                 self.game_running = False
 
+    def event_loop(self):
+        for event in pg.event.get(): # EVENT LOOP
+            if event.type == pg.QUIT:
+                self.game_running = False
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_UP and not self.key_pressed:
+                    if self.snake.current_direction != vector(0, 1):
+                        self.snake.current_direction = self.snake.directions['Up']
+                        self.key_pressed = True
+                elif event.key == pg.K_RIGHT and not self.key_pressed:
+                    if self.snake.current_direction != vector(-1, 0):
+                        self.key_pressed = True
+                        self.snake.current_direction = self.snake.directions['Right']
+                elif event.key == pg.K_DOWN and not self.key_pressed:
+                    if self.snake.current_direction != vector(0, -1):
+                        self.key_pressed = True
+                        self.snake.current_direction = self.snake.directions['Down']
+                elif event.key == pg.K_LEFT and not self.key_pressed:
+                    if self.snake.current_direction != vector(1, 0):
+                        self.key_pressed = True
+                        self.snake.current_direction = self.snake.directions['Left']
+
     def run(self):
         self.snake = Snake(self.DARK_PURPLE, self)
         self.food = Food(self.RED, self)
         self.game_running = True
         self.last_move_time = 0
-        self.score = 0
+        # self.score = 0
+
 
         while self.game_running: # GAME LOOP
             self.current_time = pg.time.get_ticks()
 
-            for event in pg.event.get(): # EVENT LOOP
-                if event.type == pg.QUIT:
-                    self.game_running = False
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_UP and not self.key_pressed:
-                        if self.snake.current_direction != vector(0, 1):
-                            self.snake.current_direction = self.snake.directions['Up']
-                            self.key_pressed = True
-                    elif event.key == pg.K_RIGHT and not self.key_pressed:
-                        if self.snake.current_direction != vector(-1, 0):
-                            self.key_pressed = True
-                            self.snake.current_direction = self.snake.directions['Right']
-                    elif event.key == pg.K_DOWN and not self.key_pressed:
-                        if self.snake.current_direction != vector(0, -1):
-                            self.key_pressed = True
-                            self.snake.current_direction = self.snake.directions['Down']
-                    elif event.key == pg.K_LEFT and not self.key_pressed:
-                        if self.snake.current_direction != vector(1, 0):
-                            self.key_pressed = True
-                            self.snake.current_direction = self.snake.directions['Left']
-            
+            if self.check_win():
+                self.game_running = False
+
+            self.event_loop()
             self.process_movement()
 
             self.screen.fill(self.WHITE)
@@ -91,8 +97,10 @@ class Game:
             self.clock.tick(self.FRAMERATE)
     
     def check_win(self):
-        if self.score == self.rows * self.rows - 3:
+        if self.score == self.rows * self.columns - 3:
             return True
+        else:
+            return False
 
 def main():
     pg.init()

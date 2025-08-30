@@ -29,9 +29,6 @@ class Snake:
             pg.draw.rect(screen, self.color, rect, width=2)
     
     def move(self):
-        if self.game.check_win():
-            self.game.game_running = False
-            return self.game.end_menu()
         new_head = self.body[0] + self.current_direction
         if not self.eaten_food:
             self.body = [new_head] + self.body[:-1]
