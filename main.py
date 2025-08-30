@@ -3,6 +3,7 @@ from pygame import Vector2 as vector
 from snake import Snake
 from food import Food
 from menu import show_config_menu
+from collections import deque
 
 class Game:
     def __init__(self, board_size=15, cell_size=30, snake_speed=150):
@@ -26,12 +27,13 @@ class Game:
 
         self.screen = pg.display.set_mode(self.screen_dim)
         self.clock = pg.time.Clock()
-        self.key_pressed = False
 
         self.snake = Snake(self.DARK_PURPLE, self)
         self.food = Food(self.RED, self)
         self.last_move_time = 0
         self.score = 0
+
+        self.keys_pressed = deque(maxlen=2)
 
     def draw_grid(self):
         for x in range(0, self.screen_dim[0], self.cell_size):
@@ -55,7 +57,7 @@ class Game:
     def process_movement(self):
         if self.current_time - self.last_move_time > self.snake_speed:
             self.last_move_time = self.current_time
-            self.snake.move()
+            self.snake.move(self.keys_pressed)
             self.snake.head = self.snake.body[0]
 
             if self.check_eaten_food():
@@ -71,22 +73,14 @@ class Game:
             if event.type == pg.QUIT:
                 self.game_running = False
             elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_UP and not self.key_pressed:
-                    if self.snake.current_direction != vector(0, 1):
-                        self.snake.current_direction = self.snake.directions['Up']
-                        self.key_pressed = True
-                elif event.key == pg.K_RIGHT and not self.key_pressed:
-                    if self.snake.current_direction != vector(-1, 0):
-                        self.key_pressed = True
-                        self.snake.current_direction = self.snake.directions['Right']
-                elif event.key == pg.K_DOWN and not self.key_pressed:
-                    if self.snake.current_direction != vector(0, -1):
-                        self.key_pressed = True
-                        self.snake.current_direction = self.snake.directions['Down']
-                elif event.key == pg.K_LEFT and not self.key_pressed:
-                    if self.snake.current_direction != vector(1, 0):
-                        self.key_pressed = True
-                        self.snake.current_direction = self.snake.directions['Left']
+                if event.key == pg.K_UP:
+                    self.keys_pressed.append(self.snake.directions['Up'])
+                elif event.key == pg.K_RIGHT:
+                    self.keys_pressed.append(self.snake.directions['Right'])
+                elif event.key == pg.K_DOWN:
+                    self.keys_pressed.append(self.snake.directions['Down'])
+                elif event.key == pg.K_LEFT:
+                    self.keys_pressed.append(self.snake.directions['Left'])
 
     def run(self):
         self.game_running = True

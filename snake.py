@@ -28,11 +28,14 @@ class Snake:
                            self.game.cell_size)
             pg.draw.rect(screen, self.color, rect, width=2)
     
-    def move(self):
+    def move(self, keys_pressed):
+        if keys_pressed:
+            self.current_direction = keys_pressed[0]
+            keys_pressed.popleft()
+
         new_head = self.body[0] + self.current_direction
         if not self.eaten_food:
             self.body = [new_head] + self.body[:-1]
         else:
             self.body = [new_head] + self.body[:]
             self.eaten_food = False
-        self.game.key_pressed = False
