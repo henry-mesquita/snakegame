@@ -36,16 +36,3 @@ class Snake:
             self.body = [new_head] + self.body[:]
             self.eaten_food = False
         self.game.key_pressed = False
-
-    def check_death(self):
-        body_collision = self.head in self.body[1:]
-        border_x_collision = (self.head.x < 0 or self.head.x * self.game.cell_size >= self.game.screen_dim[0])
-        border_y_collision = (self.head.y < 0 or self.head.y * self.game.cell_size >= self.game.screen_dim[1])
-        
-        if body_collision or border_x_collision or border_y_collision:
-            return True
-        return False
-
-    def check_eaten_food(self):
-        if self.head == self.game.food.pos:
-            return True
