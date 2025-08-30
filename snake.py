@@ -30,7 +30,16 @@ class Snake:
     
     def move(self, keys_pressed):
         if keys_pressed:
-            self.current_direction = keys_pressed[0]
+            if self.current_direction == self.directions['Up'] and keys_pressed[0] == self.directions['Down']:
+                pass
+            elif self.current_direction == self.directions['Right'] and keys_pressed[0] == self.directions['Left']:
+                pass
+            elif self.current_direction == self.directions['Down'] and keys_pressed[0] == self.directions['Up']:
+                pass
+            elif self.current_direction == self.directions['Left'] and keys_pressed[0] == self.directions['Right']:
+                pass
+            else:
+                self.current_direction = keys_pressed[0]
             keys_pressed.popleft()
 
         new_head = self.body[0] + self.current_direction

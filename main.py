@@ -9,6 +9,7 @@ class Game:
     def __init__(self, board_size=15, cell_size=30, snake_speed=150):
         pg.init()
         pg.display.set_caption('Snake Game')
+        self.font = pg.font.Font(None, 20)
 
         self.FRAMERATE = 60
         self.GREEN = (0, 255, 0)
@@ -34,6 +35,12 @@ class Game:
         self.score = 0
 
         self.keys_pressed = deque(maxlen=2)
+    
+    def draw_text(self, info, x=10, y=10):
+        debug_surface = self.font.render(str(info), True, 'Green')
+        debug_rect = debug_surface.get_rect(topleft=(x, y))
+        pg.draw.rect(self.screen, 'white', debug_rect)
+        self.screen.blit(debug_surface, debug_rect)
 
     def draw_grid(self):
         for x in range(0, self.screen_dim[0], self.cell_size):
@@ -81,6 +88,12 @@ class Game:
                     self.keys_pressed.append(self.snake.directions['Down'])
                 elif event.key == pg.K_LEFT:
                     self.keys_pressed.append(self.snake.directions['Left'])
+    
+    def check_win(self):
+        if self.score == self.rows * self.columns - 3:
+            return True
+        else:
+            return False
 
     def run(self):
         self.game_running = True
@@ -100,12 +113,6 @@ class Game:
 
             pg.display.update()
             self.clock.tick(self.FRAMERATE)
-    
-    def check_win(self):
-        if self.score == self.rows * self.columns - 3:
-            return True
-        else:
-            return False
 
 def main():
     pg.init()
