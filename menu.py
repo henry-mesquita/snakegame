@@ -1,7 +1,7 @@
 import pygame as pg
 import pygame_gui
 
-def show_config_menu(first_time=True):
+def show_config_menu():
     WINDOW_SIZE = (800, 600)
     config_screen = pg.display.set_mode(WINDOW_SIZE)
     manager = pygame_gui.UIManager(WINDOW_SIZE)
@@ -81,9 +81,17 @@ def show_config_menu(first_time=True):
                     board_size = int(board_slider.get_current_value())
                     cell_size = int(cells_slider.get_current_value())
                     snake_speed = int(snake_speed_slider.get_current_value())
+                    min_value = snake_speed_slider.value_range[0]
+                    max_value = snake_speed_slider.value_range[1]
+                    snake_speed = abs(snake_speed - (max_value - min_value))
+
                     running = False
+                    return board_size, cell_size, snake_speed, True
                 
                 if event.ui_element == quit_btn:
+                    board_size = int(board_slider.get_current_value())
+                    cell_size = int(cells_slider.get_current_value())
+                    snake_speed = int(snake_speed_slider.get_current_value())
                     running = False
                     return board_size, cell_size, snake_speed, False
             manager.process_events(event)
@@ -92,5 +100,3 @@ def show_config_menu(first_time=True):
         config_screen.fill((40, 40, 40))
         manager.draw_ui(config_screen)
         pg.display.update()
-
-    return board_size, cell_size, snake_speed, True
