@@ -6,7 +6,7 @@ from menu import show_config_menu
 from collections import deque
 
 class Game:
-    def __init__(self, board_size=15, cell_size=30, snake_speed=150):
+    def __init__(self, board_size: int=15, cell_size: int=30, snake_speed: int=150) -> None:
         pg.init()
         pg.display.set_caption('Snake Game')
         self.font = pg.font.Font(None, 20)
@@ -36,23 +36,23 @@ class Game:
 
         self.keys_pressed = deque(maxlen=2)
     
-    def draw_text(self, info, x=10, y=10):
+    def draw_text(self, info: str, x: int=10, y: int=10) -> None:
         debug_surface = self.font.render(str(info), True, 'Green')
         debug_rect = debug_surface.get_rect(topleft=(x, y))
         pg.draw.rect(self.screen, 'white', debug_rect)
         self.screen.blit(debug_surface, debug_rect)
 
-    def draw_grid(self):
+    def draw_grid(self) -> None:
         for x in range(0, self.screen_dim[0], self.cell_size):
             pg.draw.line(self.screen, self.GREY, (x, 0), (x, self.screen_dim[1]), width=3)
         for y in range(0, self.screen_dim[1], self.cell_size):
             pg.draw.line(self.screen, self.GREY, (0, y), (self.screen_dim[0], y), width=3)
     
-    def check_eaten_food(self):
+    def check_eaten_food(self) -> bool:
         if self.snake.head == self.food.pos:
             return True
 
-    def check_death(self):
+    def check_death(self) -> bool:
         body_collision = self.snake.head in self.snake.body[1:]
         border_x_collision = (self.snake.head.x < 0 or self.snake.head.x * self.cell_size >= self.screen_dim[0])
         border_y_collision = (self.snake.head.y < 0 or self.snake.head.y * self.cell_size >= self.screen_dim[1])
@@ -61,7 +61,7 @@ class Game:
             return True
         return False
 
-    def process_movement(self):
+    def process_movement(self) -> None:
         if self.current_time - self.last_move_time > self.snake_speed:
             self.last_move_time = self.current_time
             self.snake.move(self.keys_pressed)
@@ -75,7 +75,7 @@ class Game:
         if self.check_death():
             self.game_running = False
 
-    def event_loop(self):
+    def event_loop(self) -> None:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.game_running = False
@@ -89,13 +89,13 @@ class Game:
                 elif event.key == pg.K_LEFT:
                     self.keys_pressed.append(self.snake.directions['Left'])
     
-    def check_win(self):
+    def check_win(self) -> bool:
         if self.score == self.rows * self.columns - 3:
             return True
         else:
             return False
 
-    def run(self):
+    def run(self) -> None:
         self.game_running = True
         while self.game_running: # GAME LOOP
             self.current_time = pg.time.get_ticks()
@@ -114,7 +114,7 @@ class Game:
             pg.display.update()
             self.clock.tick(self.FRAMERATE)
 
-def main():
+def main() -> None:
     pg.init()
     while True:
         try:

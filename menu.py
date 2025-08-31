@@ -1,7 +1,7 @@
 import pygame as pg
 import pygame_gui
 
-def show_config_menu():
+def show_config_menu() -> None:
     WINDOW_SIZE = (800, 600)
     config_screen = pg.display.set_mode(WINDOW_SIZE)
     manager = pygame_gui.UIManager(WINDOW_SIZE)
