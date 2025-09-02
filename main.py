@@ -135,18 +135,19 @@ class Game:
         Returns:
             None
         """
+        key_map = {
+            pg.K_UP:    self.snake.directions['Up'],
+            pg.K_RIGHT: self.snake.directions['Right'],
+            pg.K_DOWN:  self.snake.directions['Down'],
+            pg.K_LEFT:  self.snake.directions['Left']
+        }
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.game_running = False
             elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_UP:
-                    self.keys_pressed.append(self.snake.directions['Up'])
-                elif event.key == pg.K_RIGHT:
-                    self.keys_pressed.append(self.snake.directions['Right'])
-                elif event.key == pg.K_DOWN:
-                    self.keys_pressed.append(self.snake.directions['Down'])
-                elif event.key == pg.K_LEFT:
-                    self.keys_pressed.append(self.snake.directions['Left'])
+                if event.key in key_map:
+                    self.keys_pressed.append(key_map[event.key])
     
     def check_win(self) -> bool:
         """
