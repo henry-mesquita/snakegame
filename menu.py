@@ -72,7 +72,7 @@ def show_config_menu() -> tuple[int, int, int, bool]:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
-                return board_size, cell_size, snake_speed, False
+                return (board_size, cell_size, snake_speed, False)
 
             if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
                 if event.ui_element == board_slider:
@@ -92,14 +92,14 @@ def show_config_menu() -> tuple[int, int, int, bool]:
                     snake_speed = abs(snake_speed - (max_value - min_value))
 
                     running = False
-                    return board_size, cell_size, snake_speed, True
+                    return (board_size, cell_size, snake_speed, True)
                 
                 if event.ui_element == quit_btn:
                     board_size = int(board_slider.get_current_value())
                     cell_size = int(cells_slider.get_current_value())
                     snake_speed = int(snake_speed_slider.get_current_value())
                     running = False
-                    return board_size, cell_size, snake_speed, False
+                    return (board_size, cell_size, snake_speed, False)
             manager.process_events(event)
 
         manager.update(60)
