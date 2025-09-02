@@ -24,20 +24,23 @@ class Game:
             None
         """
         # GAME CONFIG
-        self.FRAMERATE              = 60
-        self.GREEN                  = (0, 255, 0)
-        self.WHITE                  = (255, 255, 255)
-        self.BLACK                  = (0, 0, 0)
-        self.RED                    = (255, 0, 0)
-        self.DARK_PURPLE            = (75, 0, 130)
-        self.GREY                   = (240, 240, 240)
-        self.DARK_GREY              = (170, 170, 170)
+        self.FRAMERATE      = 60
+        self.GREEN          = (0, 255, 0)
+        self.WHITE          = (255, 255, 255)
+        self.BLACK          = (0, 0, 0)
+        self.RED            = (255, 0, 0)
+        self.DARK_PURPLE    = (75, 0, 130)
+        self.GREY           = (240, 240, 240)
+        self.DARK_GREY      = (170, 170, 170)
 
         # BOARD CONFIG
         self.board_size         = board_size
         self.cell_size          = cell_size
-        self.rows, self.columns = board_size, board_size
-        self.screen_dim         = (self.columns * self.cell_size, self.columns * self.cell_size)
+        self.rows               = board_size
+        self.columns            = board_size
+        self.screen_width       = self.rows * self.cell_size
+        self.screen_height      = self.columns * self.cell_size
+        self.screen_dim         = (self.screen_width, self.screen_height)
 
         # GAME INSTANCES
         self.snake = Snake(self.DARK_PURPLE, self.cell_size, self.columns, self.rows)
