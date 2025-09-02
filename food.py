@@ -1,39 +1,42 @@
 import pygame as pg
-import random
 from pygame import Vector2 as vector
 
 class Food:
     def __init__(
             self,
             color: tuple[int, int, int]=(255, 0, 0),
-            cell_size: int=None,
-            columns: int=None,
-            rows: int=None,
-            body_parts: list[vector]=None
+            cell_size: int=30,
+            columns: int=15,
+            rows: int=15
         ) -> None:
+        """
+        Initialize the food.
 
+        Args:
+            color (tuple[int, int, int], optional): The color of the food. Defaults to (255, 0, 0).
+            cell_size (int, optional): The size of each cell on the game board. Defaults to None.
+            columns (int, optional): The number of columns in the game board. Defaults to None.
+            rows (int, optional): The number of rows in the game board. Defaults to None.
+        Returns:
+            None
+        """
         self.color = color
         self.cell_size = cell_size
         self.columns = columns
         self.rows = rows
-        self.body_parts = body_parts
-        self.pos = self.get_random_pos()
     
-    def draw(self, screen: pg.Surface=None) -> None:
-        rect = pg.Rect(self.pos[0] * self.cell_size,
-                       self.pos[1] * self.cell_size,
+    def draw(self, screen: pg.Surface, pos: tuple[int, int]) -> None:
+        """
+        Draw the food on the screen.
+
+        Args:
+            screen (pg.Surface): The surface to draw on. Defaults to None.
+            pos (tuple[int, int]): The position of the food. Defaults to None.
+        Returns:
+            None
+        """
+        rect = pg.Rect(pos[0] * self.cell_size,
+                       pos[1] * self.cell_size,
                        self.cell_size,
                        self.cell_size)
         pg.draw.rect(screen, self.color, rect, width=2)
-    
-    def get_random_pos(self) -> vector:
-        while True:
-            x = random.randint(0, self.columns - 1)
-            y = random.randint(0, self.rows - 1)
-            pos_ok = True
-            for body_part in self.body_parts:
-                if body_part.x == x and body_part.y == y:
-                    pos_ok = False
-                    break
-            if pos_ok:
-                return vector(x, y)
