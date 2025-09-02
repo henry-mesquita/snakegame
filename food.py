@@ -1,11 +1,15 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from main import Game
+
 import pygame as pg
 import random
 from pygame import Vector2 as vector
 
-
 class Food:
-    def __init__(self, color: tuple=(255, 0, 0), game: Game=None) -> None:
+    def __init__(self, color: tuple[int, int, int]=(255, 0, 0), game: Game=None) -> None:
         self.game = game
         self.color = color
         self.pos = self.get_random_pos()

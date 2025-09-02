@@ -1,10 +1,15 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from main import Game
+
 from pygame import Vector2 as vector
 import pygame as pg
 from collections import deque
 
 class Snake:
-    def __init__(self, color: tuple=(75, 0, 130), game: Game=None) -> None:
+    def __init__(self, color: tuple[int, int, int]=(75, 0, 130), game: Game=None) -> None:
         self.game = game
         self.body = [
             vector(self.game.columns // 2, self.game.rows // 2),
