@@ -1,12 +1,12 @@
 import pygame as pg
 import pygame_gui
 
-def show_config_menu() -> None:
+def show_config_menu() -> tuple[int, int, int, bool]:
     """
     Show the configuration menu for the game.
 
     Returns:
-        None
+        tuple[int, int, int, bool]: A tuple containing the cell size, snake speed, and wether to run the game.
     """
     WINDOW_SIZE = (800, 600)
     config_screen = pg.display.set_mode(WINDOW_SIZE)
