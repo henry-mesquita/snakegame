@@ -1,22 +1,25 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from main import Game
-
 from pygame import Vector2 as vector
 import pygame as pg
 from collections import deque
 
 class Snake:
-    def __init__(self, color: tuple[int, int, int]=(75, 0, 130), game: Game=None) -> None:
-        self.game = game
-        self.body = [
-            vector(self.game.columns // 2, self.game.rows // 2),
-            vector(self.game.columns // 2 - 1, self.game.rows // 2),
-            vector(self.game.columns // 2 - 2, self.game.rows // 2)
-        ]
+    def __init__(
+            self,
+            color: tuple[int, int, int]=(75, 0, 130),
+            cell_size: int=None,
+            columns: int=None,
+            rows: int=None
+        ) -> None:
+
         self.color = color
+        self.cell_size = cell_size
+        self.columns = columns
+        self.rows = rows
+        self.body = [
+            vector(self.columns // 2, self.rows // 2),
+            vector(self.columns // 2 - 1, self.rows // 2),
+            vector(self.columns // 2 - 2, self.rows // 2)
+        ]
         self.directions = {
             'Up': vector(0, -1),
             'Right': vector(1, 0),
@@ -29,10 +32,10 @@ class Snake:
     
     def draw(self, surface: pg.Surface) -> None:
         for body_part in self.body:
-            rect = pg.Rect(body_part.x * self.game.cell_size,
-                           body_part.y * self.game.cell_size,
-                           self.game.cell_size,
-                           self.game.cell_size)
+            rect = pg.Rect(body_part.x * self.cell_size,
+                           body_part.y * self.cell_size,
+                           self.cell_size,
+                           self.cell_size)
             pg.draw.rect(surface, self.color, rect, width=2)
     
     def check_valid_keys(self, keys_pressed: deque=None) -> bool:

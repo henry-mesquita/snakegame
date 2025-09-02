@@ -29,8 +29,8 @@ class Game:
         self.screen = pg.display.set_mode(self.screen_dim)
         self.clock = pg.time.Clock()
 
-        self.snake = Snake(self.DARK_PURPLE, self)
-        self.food = Food(self.RED, self)
+        self.snake = Snake(self.DARK_PURPLE, self.cell_size, self.columns, self.rows)
+        self.food = Food(self.RED, self.cell_size, self.columns, self.rows, self.snake.body)
         self.last_move_time = 0
         self.score = 0
 
