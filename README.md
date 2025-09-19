@@ -1,6 +1,6 @@
 # Snake Game
 
-A classic snake game simulation built with Python and Pygame, demonstrating fundamental game mechanics including user input, collision detection, and real-time rendering.
+A classic snake game simulation built with Python and Pygame.
 
 <br>
 
