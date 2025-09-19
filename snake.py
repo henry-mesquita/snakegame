@@ -1,44 +1,45 @@
-from pygame import Vector2 as vector
+from pygame import Vector2
 import pygame as pg
 from collections import deque
+from typing import Optional
 
 class Snake:
     def __init__(
             self,
-            color: tuple[int, int, int]=(75, 0, 130),
-            cell_size: int=30,
-            columns: int=15,
-            rows: int=15
+            cell_size:  int,
+            columns:    int,
+            rows:       int,
+            color:      Optional[tuple[int, int, int]]=(75, 0, 130)
         ) -> None:
         """
         Initialize the snake.
 
         Args:
             color (tuple[int, int, int], optional): The color of the snake. Defaults to (75, 0, 130).
-            cell_size (int, optional): The size of each cell on the game board. Defaults to None.
-            columns (int, optional): The number of columns in the game board. Defaults to None.
-            rows (int, optional): The number of rows in the game board. Defaults to None.
+            cell_size (int): The size of each cell on the game board. Defaults to None.
+            columns (int): The number of columns in the game board. Defaults to None.
+            rows (int): The number of rows in the game board. Defaults to None.
         Returns:
             None
         """
-        self.color = color
-        self.cell_size = cell_size
-        self.columns = columns
-        self.rows = rows
-        self.body = [
-            vector(self.columns // 2, self.rows // 2),
-            vector(self.columns // 2 - 1, self.rows // 2),
-            vector(self.columns // 2 - 2, self.rows // 2)
+        self.color: tuple[int, int, int]    = color
+        self.cell_size: int                 = cell_size
+        self.columns: int                   = columns
+        self.rows: int                      = rows
+        self.body: list[Vector2] = [
+            Vector2(self.columns // 2, self.rows // 2),
+            Vector2(self.columns // 2 - 1, self.rows // 2),
+            Vector2(self.columns // 2 - 2, self.rows // 2)
         ]
         self.directions = {
-            'Up': vector(0, -1),
-            'Right': vector(1, 0),
-            'Down': vector(0, 1),
-            'Left': vector(-1, 0),
+            'Up': Vector2(0, -1),
+            'Right': Vector2(1, 0),
+            'Down': Vector2(0, 1),
+            'Left': Vector2(-1, 0),
         }
-        self.current_direction = self.directions['Right']
-        self.head = self.body[0]
-        self.eaten_food = False
+        self.current_direction: Vector2 = self.directions['Right']
+        self.head: Vector2 = self.body[0]
+        self.eaten_food: bool = False
     
     def draw(self, surface: pg.Surface) -> None:
         """
@@ -56,7 +57,10 @@ class Snake:
                            self.cell_size)
             pg.draw.rect(surface, self.color, rect, width=2)
     
-    def check_valid_keys(self, keys_pressed: deque=None) -> bool:
+    def check_valid_keys(
+            self,
+            keys_pressed: Optional[deque]=None
+    ) -> bool:
         """
         Check if the keys pressed are valid.
 
@@ -77,7 +81,10 @@ class Snake:
             else:
                 return True
     
-    def move(self, keys_pressed: deque=None) -> None:
+    def move(
+            self,
+            keys_pressed: Optional[deque]=None
+    ) -> None:
         """
         Move the snake.
 

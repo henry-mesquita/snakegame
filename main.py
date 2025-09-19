@@ -1,17 +1,18 @@
 import pygame as pg
-from pygame import Vector2 as vector
+from pygame import Vector2
 from snake import Snake
 from food import Food
 from menu import show_config_menu
 from collections import deque
+from typing import Optional
 import random
 
 class Game:
     def __init__(
             self,
-            board_size:     int=15,
-            cell_size:      int=30,
-            snake_speed:    int=150
+            board_size:     Optional[int]=15,
+            cell_size:      Optional[int]=30,
+            snake_speed:    Optional[int]=150
     ) -> None:
         """
         Initialize the game.
@@ -24,46 +25,56 @@ class Game:
             None
         """
         # GAME CONFIG
-        self.FRAMERATE      = 60
-        self.GREEN          = (0, 255, 0)
-        self.WHITE          = (255, 255, 255)
-        self.BLACK          = (0, 0, 0)
-        self.RED            = (255, 0, 0)
-        self.DARK_PURPLE    = (75, 0, 130)
-        self.GREY           = (240, 240, 240)
-        self.DARK_GREY      = (170, 170, 170)
+        self.FRAMERATE:     int                  = 60
+        self.GREEN:         tuple[int, int, int] = (0, 255, 0)
+        self.WHITE:         tuple[int, int, int] = (255, 255, 255)
+        self.BLACK:         tuple[int, int, int] = (0, 0, 0)
+        self.RED:           tuple[int, int, int] = (255, 0, 0)
+        self.DARK_PURPLE:   tuple[int, int, int] = (75, 0, 130)
+        self.GREY:          tuple[int, int, int] = (240, 240, 240)
+        self.DARK_GREY:     tuple[int, int, int] = (170, 170, 170)
 
         # BOARD CONFIG
-        self.board_size         = board_size
-        self.cell_size          = cell_size
-        self.rows               = board_size
-        self.columns            = board_size
-        self.screen_width       = self.rows * self.cell_size
-        self.screen_height      = self.columns * self.cell_size
-        self.screen_dim         = (self.screen_width, self.screen_height)
+        self.board_size: int                = board_size
+        self.cell_size: int                 = cell_size
+        self.rows: int                      = board_size
+        self.columns: int                   = board_size
+        self.screen_width: int              = self.rows * self.cell_size
+        self.screen_height: int             = self.columns * self.cell_size
+        self.screen_dim: tuple[int, int]    = (self.screen_width, self.screen_height)
 
         # GAME INSTANCES
-        self.snake = Snake(self.DARK_PURPLE, self.cell_size, self.columns, self.rows)
-        self.food = Food(self.RED, self.cell_size, self.columns, self.rows)
+        self.snake: Snake = Snake(
+            color=self.DARK_PURPLE,
+            cell_size=self.cell_size,
+            columns=self.columns,
+            rows=self.rows
+        )
+        self.food: Food = Food(self.RED, self.cell_size, self.columns, self.rows)
 
-        self.INITIAL_SNAKE_LENGTH   = len(self.snake.body)
+        self.INITIAL_SNAKE_LENGTH: int = len(self.snake.body)
 
         # SNAKE SPEED
-        self.snake_speed = snake_speed
+        self.snake_speed: int = snake_speed
 
         # PYGAME SETUP
         pg.display.set_caption('Snake Game')
-        self.font = pg.font.Font(None, 20)
-        self.screen = pg.display.set_mode(self.screen_dim)
-        self.clock = pg.time.Clock()
+        self.font: pg.font.Font     = pg.font.Font(None, 20)
+        self.screen: pg.Surface     = pg.display.set_mode(self.screen_dim)
+        self.clock: pg.time.Clock   = pg.time.Clock()
 
         # GAME SETUP
-        self.last_move_time = 0
-        self.score = 0
-        self.food_pos = self.get_random_pos()
-        self.keys_pressed = deque(maxlen=2)
+        self.last_move_time: float  = 0
+        self.score: int             = 0
+        self.food_pos: Vector2      = self.get_random_pos()
+        self.keys_pressed: deque    = deque(maxlen=2)
     
-    def draw_text(self, info: str, x: int=10, y: int=10) -> None:
+    def draw_text(
+            self,
+            info:   str,
+            x:      Optional[int]=10,
+            y:      Optional[int]=10
+    ) -> None:
         """
         Draw text on the screen.
 
@@ -74,14 +85,16 @@ class Game:
         Returns:
             None
         """
-        debug_surface = self.font.render(str(info), True, 'Green')
-        debug_rect = debug_surface.get_rect(topleft=(x, y))
+        debug_surface: pg.Surface   = self.font.render(str(info), True, 'Green')
+        debug_rect: pg.Rect         = debug_surface.get_rect(topleft=(x, y))
+
         pg.draw.rect(self.screen, 'white', debug_rect)
         self.screen.blit(debug_surface, debug_rect)
 
     def draw_grid(self) -> None:
         """
         Draw a grid on the screen.
+
         Returns:
             None
         """
@@ -93,6 +106,7 @@ class Game:
     def check_eaten_food(self) -> bool:
         """
         Check if the snake has eaten the food.
+
         Returns:
             bool: True if the snake has eaten the food, False otherwise.
         """
@@ -102,12 +116,19 @@ class Game:
     def check_death(self) -> bool:
         """
         Check if the snake has died.
+
         Returns:
             bool: True if the snake has died, False otherwise.
         """
-        body_collision = self.snake.head in self.snake.body[1:]
-        border_x_collision = (self.snake.head.x < 0 or self.snake.head.x * self.cell_size >= self.screen_dim[0])
-        border_y_collision = (self.snake.head.y < 0 or self.snake.head.y * self.cell_size >= self.screen_dim[1])
+        body_collision: bool = self.snake.head in self.snake.body[1:]
+
+        left_collision: bool    = self.snake.head.x < 0
+        right_collision: bool   = self.snake.head.x * self.cell_size >= self.screen_dim[0]
+        top_collision: bool     = self.snake.head.y < 0
+        bottom_collision: bool  = self.snake.head.y * self.cell_size >= self.screen_dim[1]
+
+        border_x_collision: bool = (left_collision or right_collision)
+        border_y_collision: bool = (top_collision or bottom_collision)
         
         if body_collision or border_x_collision or border_y_collision:
             return True
@@ -116,6 +137,7 @@ class Game:
     def process_movement(self) -> None:
         """
         Process the movement of the snake.
+
         Returns:
             None
         """
@@ -135,6 +157,7 @@ class Game:
     def event_loop(self) -> None:
         """
         Handle events.
+
         Returns:
             None
         """
@@ -155,19 +178,23 @@ class Game:
     def check_win(self) -> bool:
         """
         Check if the player has won the game.
+
         Returns:
             bool: True if the player has won the game, False otherwise.
         """
-        if self.score == self.rows * self.columns - self.INITIAL_SNAKE_LENGTH:
+        win = self.score == self.rows * self.columns - self.INITIAL_SNAKE_LENGTH
+
+        if win:
             return True
         else:
             return False
     
-    def get_random_pos(self) -> vector:
+    def get_random_pos(self) -> Vector2:
         """
         Get a random position for the food.
+
         Returns:
-            vector: The position of the food.
+            Vector2: The position of the food.
         """
         while True:
             x = random.randint(0, self.columns - 1)
@@ -178,7 +205,7 @@ class Game:
                     pos_ok = False
                     break
             if pos_ok:
-                return vector(x, y)
+                return Vector2(x, y)
 
     def run(self) -> None:
         """
@@ -186,7 +213,7 @@ class Game:
         Returns:
             None
         """
-        self.game_running = True
+        self.game_running: bool = True
         while self.game_running: # GAME LOOP
             self.current_time = pg.time.get_ticks()
 

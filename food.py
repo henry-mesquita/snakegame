@@ -1,13 +1,14 @@
 import pygame as pg
-from pygame import Vector2 as vector
+from pygame import Vector2
+from typing import Optional
 
 class Food:
     def __init__(
             self,
-            color: tuple[int, int, int]=(255, 0, 0),
-            cell_size: int=30,
-            columns: int=15,
-            rows: int=15
+            color: Optional[tuple[int, int, int]]=(255, 0, 0),
+            cell_size: Optional[int]=30,
+            columns: Optional[int]=15,
+            rows: Optional[int]=15
         ) -> None:
         """
         Initialize the food.
@@ -20,10 +21,10 @@ class Food:
         Returns:
             None
         """
-        self.color = color
-        self.cell_size = cell_size
-        self.columns = columns
-        self.rows = rows
+        self.color: tuple[int, int, int] = color
+        self.cell_size: int = cell_size
+        self.columns: int = columns
+        self.rows: int = rows
     
     def draw(self, screen: pg.Surface, pos: tuple[int, int]) -> None:
         """
