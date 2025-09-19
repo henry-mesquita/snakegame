@@ -1,10 +1,10 @@
-# Snake Game Simulation
+# Snake Game
 
 A classic snake game simulation built with Python and Pygame, demonstrating fundamental game mechanics including user input, collision detection, and real-time rendering.
 
 <br>
 
-![GIF of Snake Game Simulation](viz/video.gif)
+<img src="viz/video.gif" alt="GIF of Snake Game Simulation" width="400"/>
 
 ---
 
